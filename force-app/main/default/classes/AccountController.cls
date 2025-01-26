@@ -9,6 +9,7 @@ public with sharing class AccountController {
         return accountList;
     }
     // 取引先レコードを作成する
+    @AuraEnabled
     public static Id createAccountRecord(String name) {
         // 取引先名のチェック
         if (String.isBlank(name)) {
@@ -25,6 +26,7 @@ public with sharing class AccountController {
     }
     
     // 指定した名前を持つ取引先レコードを取得する
+    @AuraEnabled
     public static Account getAccountRecord(String name) {
         // 取引先名がない場合エラー処理
         if (String.isBlank(name)) {
@@ -38,6 +40,7 @@ public with sharing class AccountController {
     }
 
     // 取引先の電話番号を更新する
+    @AuraEnabled
     public static void updateAccountRecord(String name, String phone) {
         // 引数の名前を持つ取引先レコードを取得
         List<Account> accts = [SELECT Id, Name, Phone FROM Account WHERE Name = :name LIMIT 1];
@@ -61,6 +64,7 @@ public with sharing class AccountController {
         update acct;
     }
     // 指定した名前の取引先レコードを削除する
+    @AuraEnabled
     public static void deleteAccountRecord(String name) {
         if (String.isBlank(name)) {
             // 引数が空文字列のときエラーをスローする
