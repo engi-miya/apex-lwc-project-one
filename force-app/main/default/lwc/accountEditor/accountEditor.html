@@ -1,0 +1,13 @@
+<template>
+    <lightning-card>
+        <!-- 編集画面 -->
+        <lightning-record-form
+            object-api-name="Account"
+            record-id={recordId}
+            fields={fields}
+            columns="4"
+            mode="edit"
+            onsubmit={handleSubmit}>
+        </lightning-record-form>
+    </lightning-card>
+</template>
