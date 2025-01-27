@@ -1,0 +1,32 @@
+<template>
+    <!-- リスト表示するデータテーブル -->
+     <lightning-card>
+         <div class="slds-var-m-around_large">
+             <lightning-datatable 
+             key-field="Id"
+             data={data}
+             columns={columns}
+             >
+            </lightning-datatable>
+        </div>
+        <!--  -->
+        <div class="slds-var-m-around_large">
+            <!-- 検索する取引先名を入力するための入力要素 -->
+            <h2>検索する取引先名を入力</h2>
+            <lightning-input
+            type="text"
+            label="取引先名"
+            value={accountName}
+            onchange={handleChangeAccountName}
+            required
+            ></lightning-input>
+            <!-- 取引先の検索を開始するボタン -->
+            <lightning-button
+            variant="brand"
+            label="取引先を検索"
+            onclick={handleGetAccountRecords}
+            >
+        </lightning-button>
+    </div>
+</lightning-card>
+</template>

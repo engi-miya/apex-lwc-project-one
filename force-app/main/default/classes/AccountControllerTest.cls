@@ -2,35 +2,18 @@
 private class AccountControllerTest {
   // テストデータを作成する
   @TestSetup
-  static void setupTestData() {
+  private static void setupTestData() {
     List<Account> testAccounts = new List<Account>();
     for (Integer i = 0; i < 10; i++) {
       testAccounts.add(
         new Account(
-          Name = 'Test取引先' + i,
+          Name = 'test取引先' + i,
           Phone = '03-1234-6789' + i,
           Website = 'www.test' + i + '.com'
         )
       );
     }
     insert testAccounts;
-  }
-  // 取引先レコード取得_正常系テスト
-  @IsTest
-  private static void testGeAccountRecord_positive() {
-    // テストメソッドの実行
-    List<Account> accounts = AccountController.getAccountRecords();
-    // アサーション
-    Assert.areEqual(10, accounts.size(), '取引先の数が一致しません。');
-  }
-
-  // 取引先レコード取得_異常系テスト
-  @IsTest
-  private static void testGeAccountRecord_negative() {
-    // テストメソッドの実行
-    List<Account> accounts = AccountController.getAccountRecords();
-    // アサーション
-    Assert.areEqual(10, accounts.size(), '取引先の数が一致しません。');
   }
 
   // 取引先アカウント作成_正常系
@@ -41,11 +24,7 @@ private class AccountControllerTest {
     String testName = 'test1';
     AccountController.createAccountRecord(testName);
 
-    // アサーション
     // 取引先名がないとき
-    // Id v1 = accountId;
-    // Assert.isTrue(v1 != null, '取引先IDがnullです。');
-
     // testName取引先取得
     Account testAccount = [SELECT Id, Name FROM Account WHERE Name = :testName LIMIT 1];
     // アサーション
@@ -70,7 +49,7 @@ private class AccountControllerTest {
     Assert.isTrue(caughtException, '例外がスローされませんでした。');
   }
 
-  // 取引先レコード取得_正常系
+  // 取引先1レコード取得_正常系
   @IsTest
   private static void testGetAccountRecord_positive() {
     // テストデータの作成
@@ -85,7 +64,7 @@ private class AccountControllerTest {
     Assert.areEqual('ToGet', testAccount.Name, '取引先名が一致しません。');
   }
   @IsTest
-  // 取引先レコード取得_異常系
+  // 取引先1レコード取得_異常系
   private static void testGetAccount_negative() {
     // 取引先名が空欄のデータ作成
     String emptyName = '';
@@ -105,6 +84,48 @@ private class AccountControllerTest {
     Assert.isTrue(caughtException, '例外がスローされませんでした。');
   }
   
+  // 複数の取引先レコードを取得_正常系
+  @isTest
+  private static void testGetAccountRecords_positive() {
+    // テストスタート
+    Test.startTest();
+    // テストレコードを作成
+    // setupTestData();
+    // 取引先名に'test'を含むレコードを取得
+    List<Account> testAccounts = AccountController.getAccountRecords('test');
+    // レコード数を比較
+    Assert.areEqual(10, testAccounts.size(), 'レコードの数が違います。');
+    Test.stopTest();
+  }
+
+  // 複数の取引先レコードを取得_異常系
+  // 存在しない取引先名を引数にしたとき
+  @isTest
+  private static void getAccountRecords_invalidAccountName() {
+    Test.startTest();
+    // 存在しないレコード軍を取得
+    List<Account> testAccounts = AccountController.getAccountRecords('ありえん');
+    // サイズが0のはず
+    Assert.areEqual(0, testAccounts.size(), 'レコード数が0ではありません。');
+    Test.stopTest();
+  }
+
+  // 引数が空文字列またはnullのとき
+  @IsTest
+  private static void getAccountRecords_accountNameIsEmpty() {
+    String emptyAccountName = '';
+    Test.startTest();
+    try {
+      List<Account> testAccounts = AccountController.getAccountRecords(emptyAccountName);
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      Assert.areEqual('取引先名は必須です。', e.getMessage(), 'エラーメッセージが一致しません。');
+    }
+    Test.stopTest();
+  }
+
+
+
   // 取引先レコードを更新_正常系
   // ユーザーが期待する通りの動きをした場合のテスト
   @IsTest

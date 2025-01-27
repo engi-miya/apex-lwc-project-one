@@ -8,22 +8,24 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class AccountCreator extends LightningElement {
     // 入力された取引先の値を格納するプロパティを定義 (慣習的に変数宣言ワードは付けない)
-    accountName = '';
+    accountNameForInsert = '';
     
     // 取引先名を変更したときに実行されるハンドラ関数
     handleNameChange(event) {
-        // 入力フィールドの値を accountName プロパティに代入
-        this.accountName = event.target.value;
+        // 入力フィールドの値を accountNameForInsert プロパティに代入
+        this.accountNameForInsert = event.target.value;
     }
+
     // 取引先を作成ボタンを押したときに実行されるハンドラ関数
     handleCreateAccount() {
         // ApexのcreateAccountRecordメソッドを実行
         // ApexメソッドcreateAccountRecordの引数名がnameであるため、
         // オブジェクトリテラルでnameプロパティに値を設定。
-        createAccountRecord({ name: this.accountName})
+
+        createAccountRecord({ name: this.accountNameForInsert })
             .then((result) => {
                 console.log('作成した取引先ID: ' + result);
-                this.accountName = '';
+                this.accountNameForInsert = '';
                 // 組み込みのdispatchEventを使用してトースト表示をする
                 this.dispatchEvent(
                     new ShowToastEvent({
