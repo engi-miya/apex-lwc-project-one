@@ -15,11 +15,13 @@ export default class AccountCreator extends LightningElement {
         // 入力フィールドの値を accountNameForInsert プロパティに代入
         this.accountNameForInsert = event.target.value;
     }
+
     // 取引先を作成ボタンを押したときに実行されるハンドラ関数
     handleCreateAccount() {
         // ApexのcreateAccountRecordメソッドを実行
         // ApexメソッドcreateAccountRecordの引数名がnameであるため、
         // オブジェクトリテラルでnameプロパティに値を設定。
+
         createAccountRecord({ name: this.accountNameForInsert })
             .then((result) => {
                 console.log('作成した取引先ID: ' + result);

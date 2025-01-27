@@ -1,7 +1,6 @@
 // 取引先レコードを取得するApexコード
 public with sharing class AccountController {
-    // 取引先レコードを作成する
-    @AuraEnabled (cacheable=true)
+    @AuraEnabled
     public static Id createAccountRecord(String name) {
         // 取引先名のチェック
         if (String.isBlank(name)) {
@@ -16,8 +15,8 @@ public with sharing class AccountController {
 
         return acct.Id;
     }
-    
-    // 指定した名前を持つ取引先レコードをつだけ取得する
+  
+    // 取引先レコードを1つだけ取得する
     @AuraEnabled
     public static Account getAccountRecord(String name) {
         // 取引先名がない場合エラー処理
