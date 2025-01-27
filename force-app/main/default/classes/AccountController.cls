@@ -25,7 +25,7 @@ public with sharing class AccountController {
         return acct.Id;
     }
     
-    // 指定した名前を持つ取引先レコードを取得する
+    // 指定した名前を持つ取引先レコードをつだけ取得する
     @AuraEnabled
     public static Account getAccountRecord(String name) {
         // 取引先名がない場合エラー処理
@@ -38,6 +38,22 @@ public with sharing class AccountController {
         Account acct = [SELECT Id, Name FROM Account WHERE Name = :name LIMIT 1];
         return acct;
     }
+    
+    // 指定した名前を持つ取引先レコードを複数取得する
+    public static List<Account> getAccountRecords(String name) {
+        if (String.isBlank(name)) {
+            throw new IllegalArgumentException('取引先名は必須です。');
+        }
+     
+        List<Account> accts = [SELECT Id, Name, Phone, Website
+                                FROM Account
+                                WHERE Name LIKE : '%' + name + '%'];
+        if (accts.size() == 0) {
+            System.debug('取引先が見つかりません');
+        }
+        return accts;
+    }
+
 
     // 取引先の電話番号を更新する
     @AuraEnabled
