@@ -1,15 +1,7 @@
 // 取引先レコードを取得するApexコード
 public with sharing class AccountController {
-    @AuraEnabled (cacheable = true)
-
-    public static List<Account> getAccountRecords() {
-    // Get All Account Records
-        List<Account> accountList = [SELECT Id, Name, Phone, Website
-                                        FROM ACcount];
-        return accountList;
-    }
     // 取引先レコードを作成する
-    @AuraEnabled
+    @AuraEnabled (cacheable=true)
     public static Id createAccountRecord(String name) {
         // 取引先名のチェック
         if (String.isBlank(name)) {
@@ -39,7 +31,9 @@ public with sharing class AccountController {
         return acct;
     }
     
+
     // 指定した名前を持つ取引先レコードを複数取得する
+    @AuraEnabled
     public static List<Account> getAccountRecords(String name) {
         if (String.isBlank(name)) {
             throw new IllegalArgumentException('取引先名は必須です。');

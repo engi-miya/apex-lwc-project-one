@@ -15,23 +15,6 @@ private class AccountControllerTest {
     }
     insert testAccounts;
   }
-  // 取引先レコード取得_正常系テスト
-  @IsTest
-  private static void testGeAccountRecord_positive() {
-    // テストメソッドの実行
-    List<Account> accounts = AccountController.getAccountRecords();
-    // アサーション
-    Assert.areEqual(10, accounts.size(), '取引先の数が一致しません。');
-  }
-
-  // 取引先レコード取得_異常系テスト
-  @IsTest
-  private static void testGeAccountRecord_negative() {
-    // テストメソッドの実行
-    List<Account> accounts = AccountController.getAccountRecords();
-    // アサーション
-    Assert.areEqual(10, accounts.size(), '取引先の数が一致しません。');
-  }
 
   // 取引先アカウント作成_正常系
   @IsTest
@@ -41,11 +24,7 @@ private class AccountControllerTest {
     String testName = 'test1';
     AccountController.createAccountRecord(testName);
 
-    // アサーション
     // 取引先名がないとき
-    // Id v1 = accountId;
-    // Assert.isTrue(v1 != null, '取引先IDがnullです。');
-
     // testName取引先取得
     Account testAccount = [SELECT Id, Name FROM Account WHERE Name = :testName LIMIT 1];
     // アサーション
