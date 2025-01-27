@@ -1,0 +1,20 @@
+<template>
+    <lightning-card>
+        <!-- 入力フィールド -->
+        <h2>削除する</h2>
+        <lightning-input
+            class="slds-m-bottom_x-large"
+            type="text"
+            label="取引先名"
+            value={accountNameForDelete}
+            onchange={handleInputNameChange}
+            required>
+        </lightning-input>
+        <lightning-button
+            variant="brand"
+            label="取引先を削除"
+            title="Delete an Account Record"
+            onclick={handleDeleteAccountRecord}>
+        </lightning-button>
+    </lightning-card>
+</template>

@@ -1,5 +1,6 @@
 // 取引先レコードを取得するApexコード
 public with sharing class AccountController {
+    // 取引先レコードを作成する
     @AuraEnabled
     public static Id createAccountRecord(String name) {
         // 取引先名のチェック
@@ -30,7 +31,6 @@ public with sharing class AccountController {
         return acct;
     }
     
-
     // 指定した名前を持つ取引先レコードを複数取得する
     @AuraEnabled
     public static List<Account> getAccountRecords(String name) {
@@ -46,7 +46,6 @@ public with sharing class AccountController {
         }
         return accts;
     }
-
 
     // 取引先の電話番号を更新する
     @AuraEnabled
@@ -72,6 +71,7 @@ public with sharing class AccountController {
         acct.phone = phone;
         update acct;
     }
+
     // 指定した名前の取引先レコードを削除する
     @AuraEnabled
     public static void deleteAccountRecord(String name) {
@@ -82,7 +82,7 @@ public with sharing class AccountController {
             throw e;
         }
         // 削除対象のレコードを取得
-        List<Account> accts = [SELECT Id, Name FROM Account WHERE name = :name];
+        List<Account> accts = [SELECT Id, Name FROM Account WHERE Name = :name];
         if (accts.size() == 0) {
             AuraHandledException e = new AuraHandledException('取引先レコードが存在しません。');
             e.setMessage('取引先レコードが存在しません。');
