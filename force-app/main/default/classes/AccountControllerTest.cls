@@ -259,4 +259,63 @@ private class AccountControllerTest {
 
     Test.stopTest();
   }
+
+  // 取引先レコードのIndustoryを更新するメソッド_正常系
+  // Idが一致する取引先レコードのIndustoryを更新する
+  @IsTest
+  private static void testUpdateAccountIndustry_positive() {
+    // テスト取引先を取得
+    Account testAccount = [SELECT id FROM Account WHERE Name = 'test取引先1'];
+    Id idForTest = testAccount.Id;
+    // Bankingをテスト値として使用
+    String testIndustryValue = 'Banking';
+
+    AccountController.updateAccountIndustry(idForTest, testIndustryValue);
+    // Assertion
+    Account afterUpdateAccount = [SELECT Id, Industry FROM Account WHERE Id = :idForTest];
+    Assert.areEqual('Banking', afterUpdateAccount.Industry, 'Industryの値が違います。');
+  }
+  // 取引先レコードのIndustoryを更新するメソッド_異常系
+  @IsTest
+  private static void testUpdateAccountIndustry_industryIsEmpty() {
+    Account testAccount = [SELECT id FROM Account WHERE Name = 'test取引先1'];
+    Id idForTest = testAccount.Id;
+
+    // 更新する値が選択されていないときをnullとする
+    String testNullIndstry = null;
+
+    // 処理実行。例外処理がおこなわれてエラーがスローされるはず
+    try {
+      AccountController.updateAccountIndustry(idForTest, testNullIndstry);
+      Assert.fail('NNullPointerException is detected.');
+    } catch (AuraHandledException e) {
+      Assert.areEqual('Industryが選択されていません。', e.getMessage(), 'エラーメッセージが一致しません。');
+    }
+  }
+  // 無効なIdのとき例外処理がされるはず
+  @IsTest
+  private static void testUpdateAccountIndustry_InvalidId() {
+    String validIndustryValue = 'Finance';
+    // 無効なIdを引数に処理を実行。無効なIdですよという例外処理がされるはず
+    try {
+      AccountController.updateAccountIndustry('003IR00001jzvirYAA', validIndustryValue);
+      Assert.fail('AuraHandledException is detected.');
+    } catch (AuraHandledException e) {
+      Assert.areEqual('取引先IDが無効です。', e.getMessage(), 'エラーメッセージが一致しません。');
+    }
+  }
+  // Idが空文字列、nullのとき例外処理がされるはず
+  @IsTest
+  private static void testUpdateAccountIndustry_idIsEmpty() {
+    // Industryには正常値を設定
+    String validIndustryValue = 'Finance';
+    // Id部分に空文字を設定して実行。
+    try {
+      AccountController.updateAccountIndustry('', validIndustryValue);
+      Assert.fail('');
+    } catch (AuraHandledException e) {
+      // 例外処理のメッセージが一致するはず。
+        Assert.areEqual('取引先IDは必須です。', e.getMessage(), 'エラーメッセージが一致しません。');
+    }
+  }
 }

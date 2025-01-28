@@ -92,4 +92,16 @@ public with sharing class AccountController {
         // 対象の取引先レコードを削除
         delete accts;
     }
+
+    // 指定した取引先Idを持つ取引先のIndustryを更新する。
+    public static void updateAccountIndustry(Id accountId, String industry) {
+        if (String.isBlank(accountId)) {
+            throw new AuraHandledException('取引先IDは必須です。');
+        } else if (String.isBlank(industry)) {
+            throw new AuraHandledException('Industryが選択されていません。');
+        }
+        Account acctForUpdate = [SELECT Id, Industry FROM Account WHERE Id = :accountId];
+        acctForUpdate.Industry = industry;
+        update acctForUpdate;
+    }
 }
